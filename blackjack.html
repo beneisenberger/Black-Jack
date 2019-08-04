@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blackjack</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .container {
+            margin-left: 1px;
+        }
+
+        .player-board {
+            height: 160px;
+            background-color: darkgreen;
+            padding-top: 5px;
+        }
+
+        .deck-board {
+            height: 150px;
+            margin-top: 4px;
+        }
+
+        .game-text {
+            height: 150px;
+            line-height: 40px;
+        }
+
+        .score-text {
+            color: red;
+        }
+
+        .card {
+            height: 150px;
+            float: right;
+        }
+
+        img {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="col-12 container row">
+
+        <div class="player-board col-12" id="dealer"></div>
+
+        <div class="game-text col-5">
+            <p id="dealerText">♤ ♡ ♢ ♧ ♤ ♡ ♢ ♧ ♤ ♡</p>
+            <p id="innerText">Time to Play Black Jack!</p>
+            <p id="playerText">♤ ♡ ♢ ♧ ♤ ♡ ♢ ♧ ♤ ♡</p>
+        </div>
+
+        <div class="game-text score-text col-5">
+            <p id="wins">Wins: 0</p>
+            <p id="losses">Losses: 0</p>
+            <p id="ties">Ties: 0</p>
+        </div>
+
+        <div class="deck-board col-2" id="deck">
+            <img class="card"
+                src="https://png.pngtree.com/png_detail/20181019/dark-creative-atmosphereon-the-back-of-playing-cards-png-clipart_2267714.png" />
+        </div>
+
+
+        <div class="player-board col-12" id="player"></div>
+
+        <button class="btn btn-outline-primary col-3" id="play">Play</button>
+        <button class="btn btn-outline-primary col-3" id="hit">Hit</button>
+        <button class="btn btn-outline-primary col-3" id="hold">Hold</button>
+        <p id="aceText" class="col-1"></p>
+        <button id="elevenButton" value="11" class="col-1"></button>
+        <button id="oneButton" value="1" class="col-1"></button>
+
+
+    </main>
+
+
+    <script>
+
+        // VARIABLE NAMING
+
+        var sample = [{Value:"A", Suit:"H", Number: 11},{Value: "A", Suit: "D", Number: 11},{Value: "A", Suit: "S", Number: 11},{Value: "A", Suit: "C", Number: 11},];
+
+        var deck = [];
+        var suits = ["S", "D", "C", "H"];
+        var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "0", "J", "Q", "K"];
+        var numberValues = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10];
+
+        deck = getDeck();
+        console.log(deck);
+
+        var gamePlay = true;
+        var playerPlay = false;
+
+        var pc = 0;
+        var pc2 = 0;
+        var dc = 0;
+        var dc2 = 0;
+
+        let counter = 0;
+        var dealerCounter = 0;
+        var playerCounter = 0;
+
+        let playerBoard = document.getElementById("player");
+        let dealerBoard = document.getElementById("dealer");
+
+        let playerText = document.getElementById("playerText");
+        let dealerText = document.getElementById("dealerText");
+        let innerText = document.getElementById("innerText");
+
+        // GAME PLAY
+
+        // CLICK PLAY, GET FIRST FOUR CARDS
+
+        document.getElementById("play").addEventListener("click", function () {
+
+            if (gamePlay) {
+                shuffle(deck);
+                console.log(deck);
+
+                let pc = document.createElement("img");
+                pc.classList.add("card");
+                pc.src = `https://deckofcardsapi.com/static/img/${deck[0].Value}${deck[0].Suit}.png`;
+                playerBoard.appendChild(pc);
+                playerCounter += deck[0].Number;
+
+                let dc = document.createElement("img");
+                dc.classList.add("card");
+                dc.src = `https://deckofcardsapi.com/static/img/${deck[1].Value}${deck[1].Suit}.png`;
+                dealerBoard.appendChild(dc);
+                dealerCounter += deck[1].Number;
+
+                let pc2 = document.createElement("img");
+                pc2.classList.add("card");
+                pc2.src = `https://deckofcardsapi.com/static/img/${deck[2].Value}${deck[2].Suit}.png`;
+                playerBoard.appendChild(pc2);
+                if (deck[2].Number == 11) {
+                    document.getElementById("aceText").innerText = "Ace: ";
+                    document.getElementById("elevenButton").innerText = "11";
+                    document.getElementById("oneButton").innerText = "1";
+                    document.getElementById("elevenButton").addEventListener("click", function() {
+                        playerCounter += 11;
+                        playerText.innerText = `Player: ${playerCounter}`;
+                    })
+                    document.getElementById("oneButton").addEventListener("click", function() {
+                        playerCounter += 1;
+                        playerText.innerText = `Player: ${playerCounter}`;
+                    })
+                }
+                else {
+                    playerCounter += deck[2].Number;
+                }
+
+                let dc2 = document.createElement("img");
+                dc2.classList.add("card");
+                dc2.src = `https://png.pngtree.com/png_detail/20181019/dark-creative-atmosphereon-the-back-of-playing-cards-png-clipart_2267714.png`;
+                dealerBoard.appendChild(dc2);
+                dealerCounter += deck[3].Number;
+
+                counter = 4;
+
+                // IN CASE THERE'S TWO ACES
+
+                if (dealerCounter > 21) {
+                     dealerCounter -= 10;
+                }
+                
+
+                dealerText.innerText = `Dealer: ${deck[1].Number}`;
+                playerText.innerText = `Player: ${playerCounter}`;
+                innerText.innerText = "Hit or Hold?";
+
+                playerPlay = true;
+                gamePlay = false;
+            }
+
+            document.getElementById("hit").addEventListener("click", function () {
+                if (playerPlay) {
+                    let pc = document.createElement("img");
+                    pc.classList.add("card");
+                    pc.src = `https://deckofcardsapi.com/static/img/${deck[counter].Value}${deck[counter].Suit}.png`;
+                    playerBoard.appendChild(pc);
+                    playerCounter += deck[counter].Number;
+                    if (playerCounter > 21) {
+                        // if (pc.value == 11 || pc2.value == 11 || deck[counter].Number == 11) {
+                        //     playerCounter -= 10;
+                        //     return;
+                        // }
+                        // else {
+                        playerText.innerText = `Player: ${playerCounter}`;
+                        innerText.innerText = "You Lose! ☹";
+                        document.getElementById("play").innerText = "Play Again?";
+                        document.getElementById("play").addEventListener("click", function () {
+                            window.location.reload();
+                        })
+                        return;
+                    }
+                }
+                playerText.innerText = `Player: ${playerCounter}`;
+                counter++;
+            }
+            )
+
+            document.getElementById("hold").addEventListener("click", function () {
+                gamePlay = false;
+                playerPlay = false;
+                dc2.src = `https://deckofcardsapi.com/static/img/${deck[3].Value}${deck[3].Suit}.png`;
+                dealerText.innerText = `Dealer: ${dealerCounter}`;
+
+                while (dealerCounter < 17) {
+                    let dc = document.createElement("img");
+                    dc.classList.add("card");
+                    dc.src = `https://deckofcardsapi.com/static/img/${deck[counter].Value}${deck[counter].Suit}.png`;
+                    dealerBoard.appendChild(dc);
+                    dealerCounter += deck[counter].Number;
+                    dealerText.innerText = `Dealer: ${dealerCounter}`;
+                }
+                if (dealerCounter > 21) {
+                    innerText.innerText = "You Win! ☺";
+                }
+                if (dealerCounter === 21) {
+                    innerText.innerText = "You Lose! ☹";
+                }
+                if (dealerCounter === playerCounter) {
+                    innerText.innerText = "Draw";
+                }
+                else {
+                    if (dealerCounter < playerCounter) {
+                        innerText.innerText = "You Win! ☺";
+                    }
+                    if (dealerCounter > playerCounter) {
+                        innerText.innerText = "You Lose! ☹";
+                    }
+                }
+                document.getElementById("play").innerText = "Play Again?";
+                document.getElementById("play").addEventListener("click", function () {
+                    window.location.reload();
+                })
+            })
+        })
+
+        // FUNCTIONS 
+
+        function getDeck() {
+            var cards = [];
+
+            for (var i = 0; i < suits.length; i++) {
+                for (var j = 0; j < values.length; j++) {
+                    var card = { Value: values[j], Suit: suits[i], Number: numberValues[j] };
+                    cards.push(card);
+                }
+            }
+            return cards;
+        }
+
+        function shuffle(a) {
+            var currentIndex = a.length;
+            var temporaryValue;
+            var randomIndex;
+            while (0 !== currentIndex) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                temporaryValue = a[currentIndex];
+                a[currentIndex] = a[randomIndex];
+                a[randomIndex] = temporaryValue;
+            }
+            return a;
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
