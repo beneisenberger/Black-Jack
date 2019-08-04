@@ -86,7 +86,7 @@
 
         // VARIABLE NAMING
 
-        var sample = [{Value:"A", Suit:"H", Number: 11},{Value: "A", Suit: "D", Number: 11},{Value: "A", Suit: "S", Number: 11},{Value: "A", Suit: "C", Number: 11},];
+        var sample = [{ Value: "A", Suit: "H", Number: 11 }, { Value: "A", Suit: "D", Number: 11 }, { Value: "A", Suit: "S", Number: 11 }, { Value: "A", Suit: "C", Number: 11 },];
 
         var deck = [];
         var suits = ["S", "D", "C", "H"];
@@ -98,11 +98,6 @@
 
         var gamePlay = true;
         var playerPlay = false;
-
-        var pc = 0;
-        var pc2 = 0;
-        var dc = 0;
-        var dc2 = 0;
 
         let counter = 0;
         var dealerCounter = 0;
@@ -120,6 +115,8 @@
         // CLICK PLAY, GET FIRST FOUR CARDS
 
         document.getElementById("play").addEventListener("click", function () {
+
+        var dc2;
 
             if (gamePlay) {
                 shuffle(deck);
@@ -141,24 +138,9 @@
                 pc2.classList.add("card");
                 pc2.src = `https://deckofcardsapi.com/static/img/${deck[2].Value}${deck[2].Suit}.png`;
                 playerBoard.appendChild(pc2);
-                if (deck[2].Number == 11) {
-                    document.getElementById("aceText").innerText = "Ace: ";
-                    document.getElementById("elevenButton").innerText = "11";
-                    document.getElementById("oneButton").innerText = "1";
-                    document.getElementById("elevenButton").addEventListener("click", function() {
-                        playerCounter += 11;
-                        playerText.innerText = `Player: ${playerCounter}`;
-                    })
-                    document.getElementById("oneButton").addEventListener("click", function() {
-                        playerCounter += 1;
-                        playerText.innerText = `Player: ${playerCounter}`;
-                    })
-                }
-                else {
-                    playerCounter += deck[2].Number;
-                }
+                playerCounter += deck[2].Number;
 
-                let dc2 = document.createElement("img");
+                dc2 = document.createElement("img");
                 dc2.classList.add("card");
                 dc2.src = `https://png.pngtree.com/png_detail/20181019/dark-creative-atmosphereon-the-back-of-playing-cards-png-clipart_2267714.png`;
                 dealerBoard.appendChild(dc2);
@@ -171,7 +153,7 @@
                 if (dealerCounter > 21) {
                      dealerCounter -= 10;
                 }
-                
+
 
                 dealerText.innerText = `Dealer: ${deck[1].Number}`;
                 playerText.innerText = `Player: ${playerCounter}`;
@@ -200,13 +182,12 @@
                         document.getElementById("play").addEventListener("click", function () {
                             window.location.reload();
                         })
-                        return;
+                        // return;
                     }
                 }
                 playerText.innerText = `Player: ${playerCounter}`;
                 counter++;
-            }
-            )
+            })
 
             document.getElementById("hold").addEventListener("click", function () {
                 gamePlay = false;
