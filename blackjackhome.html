@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blackjack</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .container {
+            margin-left: 1px;
+        }
+
+        .player-board {
+            height: 160px;
+            background-color: darkgreen;
+            padding-top: 5px;
+        }
+
+        .deck-board {
+            height: 150px;
+            margin-top: 4px;
+        }
+
+        .game-text {
+            height: 150px;
+            line-height: 40px;
+        }
+
+        .score-text {
+            color: red;
+        }
+
+        .card {
+            height: 150px;
+            float: right;
+        }
+
+        img {
+            margin-right: 5px;
+        }
+
+        .right {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="col-12 container row">
+
+        <div class="player-board col-12" id="dealer"></div>
+
+            <div class="form-group col-5">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name">
+                <small id="name" class="form-text text-muted">Please enter your name</small>
+            </div>
+
+            <div class="form-group col-5">
+                <label for="name">Birthday</label>
+                <input type="text" class="form-control" id="birthday" aria-describedby="birthday"
+                    placeholder="MM/DD/YYYY">
+                <small id="birthday" class="form-text text-muted">You need to be 17 to play this game!</small>
+                <button class="right" type="submit" class="btn btn-primary">Submit</button>
+
+            </div>
+
+
+        <div class="deck-board col-2" id="deck">
+            <img class="card"
+                src="https://png.pngtree.com/png_detail/20181019/dark-creative-atmosphereon-the-back-of-playing-cards-png-clipart_2267714.png" />
+        </div>
+
+    </main>
+
+    <script>
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
