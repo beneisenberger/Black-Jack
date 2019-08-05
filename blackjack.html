@@ -60,7 +60,7 @@
         <div class="game-text score-text col-5">
             <p id="wins">Wins: 0</p>
             <p id="losses">Losses: 0</p>
-            <p id="ties">Ties: 0</p>
+            <p id="ties">Draws: 0</p>
         </div>
 
         <div class="deck-board col-2" id="deck">
@@ -117,6 +117,9 @@
         document.getElementById("play").addEventListener("click", function () {
 
         var dc2;
+        var winCounter = 0;
+        var loseCounter = 0;
+        var tieCounter = 0;
 
             if (gamePlay) {
                 shuffle(deck);
@@ -169,21 +172,36 @@
                     pc.classList.add("card");
                     pc.src = `https://deckofcardsapi.com/static/img/${deck[counter].Value}${deck[counter].Suit}.png`;
                     playerBoard.appendChild(pc);
-                    playerCounter += deck[counter].Number;
-                    if (playerCounter > 21) {
-                        // if (pc.value == 11 || pc2.value == 11 || deck[counter].Number == 11) {
-                        //     playerCounter -= 10;
-                        //     return;
-                        // }
-                        // else {
+
+                    if (deck[counter].Number == 11) {
+                        document.getElementById("aceText").innerText = "Ace: ";
+                        document.getElementById("elevenButton").innerText = "11";
+                        document.getElementById("oneButton").innerText = "1";
+
+                        document.getElementById("elevenButton").addEventListener("click", function() {
+                            playerCounter += 11;
+                            playerText.innerText = `Player: ${playerCounter}`;
+                        })
+                        document.getElementById("oneButton").addEventListener("click", function() {
+                            playerCounter += 1;
+                            playerText.innerText = `Player: ${playerCounter}`;
+                        })
+                    }
+                    else {
+                        playerCounter += deck[counter].Number;
                         playerText.innerText = `Player: ${playerCounter}`;
+                    }
+
+                    if (playerCounter > 21) {
                         innerText.innerText = "You Lose! ☹";
+                        loseCounter++;
+                        
                         document.getElementById("play").innerText = "Play Again?";
                         document.getElementById("play").addEventListener("click", function () {
                             window.location.reload();
                         })
-                        // return;
                     }
+    
                 }
                 playerText.innerText = `Player: ${playerCounter}`;
                 counter++;
@@ -202,24 +220,35 @@
                     dealerBoard.appendChild(dc);
                     dealerCounter += deck[counter].Number;
                     dealerText.innerText = `Dealer: ${dealerCounter}`;
+                    counter++
                 }
                 if (dealerCounter > 21) {
                     innerText.innerText = "You Win! ☺";
+                    winCounter++;
+                    return;
                 }
                 if (dealerCounter === 21) {
                     innerText.innerText = "You Lose! ☹";
+                    loseCounter++;
                 }
                 if (dealerCounter === playerCounter) {
                     innerText.innerText = "Draw";
+                    tieCounter++;
                 }
                 else {
                     if (dealerCounter < playerCounter) {
                         innerText.innerText = "You Win! ☺";
+                        winCounter++;
                     }
                     if (dealerCounter > playerCounter) {
                         innerText.innerText = "You Lose! ☹";
+                        loseCounter++;
                     }
                 }
+
+                document.getElementById("wins").innterText = `Wins: ${winCounter}`;
+                document.getElementById("losses").innterText = `Losses: ${loseCounter}`;
+
                 document.getElementById("play").innerText = "Play Again?";
                 document.getElementById("play").addEventListener("click", function () {
                     window.location.reload();
@@ -227,6 +256,11 @@
             })
         })
 
+
+        // window.setTimeout(function() {
+        //         document.getElementById("playText").innerText = "Click to Play Again"
+        //     }, 2000)
+            
         // FUNCTIONS 
 
         function getDeck() {
